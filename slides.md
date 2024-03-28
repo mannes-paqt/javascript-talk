@@ -34,16 +34,15 @@ mdc: true
 
 - Diving into Javascript
 - Asynchronous
-- NodeJS and Express
 - Libraries
+- NodeJS and Express
 - NestJS framework
-- 
+- Conclusion
+- Questions
 
 ---
 
 <center>
-
-# Dive into javascript
 
 <img src="/assets/dive-in.jpg" style="height: 400px;" />
 
@@ -279,6 +278,12 @@ function doSomeComplicatedThingsInOrder() {
 
 </div>
 
+<div v-click>
+
+- TODO: Show them the actual code
+
+</div>
+
 ---
 
 # It's async - await
@@ -394,9 +399,87 @@ console.log(new Date().getTime() - time + 'ms');
 
 ---
 
+<center>
+
+# About JS libraries
+
+<img src="/assets/wildwest.jpg" style="height: 400px;" />
+
+</center>
+
+---
+
+# About JS libraries - Famous example
+
+<div v-click.hide>
+```ts {monaco}
+function famousCode(str, len, ch) {
+  str = String(str);
+
+  var i = -1;
+
+  if (!ch && ch !== 0) ch = ' ';
+
+  len = len - str.length;
+
+  while (++i < len) {
+    str = ch + str;
+  }
+
+  return str;
+}
+```
+</div>
+<div v-after>
+```js {monaco-run}
+function leftpad(str, len, ch) {
+  str = String(str);
+
+  var i = -1;
+
+  if (!ch && ch !== 0) ch = ' ';
+
+  len = len - str.length;
+
+  while (++i < len) {
+    str = ch + str;
+  }
+
+  return str;
+}
+
+console.log(leftpad('wow', 20, '-'))
+```
+</div>
+
+<style>
+.slidev-vclick-hidden { display: none; }
+</style>
+
+---
+
+# About JS libraries - Finding the right libraries
+
+- Look for github stars ⭐⭐⭐⭐
+- Look for amount of weekly-downloads on NPM
+- Look for corporate sponsors
+- Look at the library's dependencies
+- Do you even need an external library for that? 
+  - leftPad
+  - isOdd/isEven
+
+
+---
+
+<center>
+
 # I want this on my server
 
-node logo
+<div v-click>
+<img src="/assets/node-logo.png" style="height: 400px;" />
+</div>
+
+</center>
 
 ---
 layout: two-cols-header
@@ -404,19 +487,6 @@ layout: two-cols-header
 
 # The application is your server
 ::left::
-
-## Node
-
-```mermaid
-block-beta
-  columns 1
-  Start(("Internet")) space
-  Application space
-  Start --> Application
-```
-
-::right::
-<div v-click>
 
 ## PHP
 
@@ -430,6 +500,19 @@ block-beta
   Webserver --> PHP
 ```
 
+::right::
+<div v-click>
+
+## Node
+
+```mermaid
+block-beta
+  columns 1
+  Start(("Internet")) space
+  Application space
+  Start --> Application
+```
+
 </div>
 
 <style>
@@ -438,9 +521,16 @@ block-beta
 
 ---
 
+<center>
+
 # The application is your server
 
-- The whole application is loaded in memory
+- Node: The whole application is loaded in memory and is ready to go
+- PHP: needs to start everything for every request
+
+<img src="/assets/laravel-lifecycle.png" style="height: 400px;" />
+
+</center>
 
 ---
 
@@ -726,94 +816,47 @@ echo 'Auto-increment set successfully<br>';
 
 ---
 
-<center>
-
-# About those JS libraries
-
-<img src="/assets/wildwest.jpg" style="height: 400px;" />
-
-</center>
-
----
-
-# About those JS libraries - Famous example
-
-<div v-click.hide>
-```ts {monaco}
-function famousCode(str, len, ch) {
-  str = String(str);
-
-  var i = -1;
-
-  if (!ch && ch !== 0) ch = ' ';
-
-  len = len - str.length;
-
-  while (++i < len) {
-    str = ch + str;
-  }
-
-  return str;
-}
-```
-</div>
-<div v-after>
-```js {monaco-run}
-function leftpad(str, len, ch) {
-  str = String(str);
-
-  var i = -1;
-
-  if (!ch && ch !== 0) ch = ' ';
-
-  len = len - str.length;
-
-  while (++i < len) {
-    str = ch + str;
-  }
-
-  return str;
-}
-
-console.log(leftpad('wow', 20, '-'))
-```
-</div>
-
-<style>
-.slidev-vclick-hidden { display: none; }
-</style>
-
----
-
-# About those JS libraries - Finding the right libraries
-
-- Look for github stars ⭐⭐⭐⭐
-- Look for amount of weekly-downloads on NPM
-- Look for corporate sponsors
-- Do you even need an external library for that? 
-  - leftPad
-  - isOdd/isEven
-
----
-
 # NestJS
 
-logo, sponsors, typescript
+<img src="/assets/nest-logo.png" style="height: 100px;" />
 
 - TypeScript
-- Controllers
-- Services
+- MVC (Module, serVice, Controller)
 - Dependency Injection
-- Jobs
-- Queue
-- Scheduler
+- Queues
+- Schedulers
 - Documentation
 
-All with starting a single process
+All with starting a single process*<br />
 
+<div v-click>
+<sub>* extra libraries will be required</sub>
+</div>
 --- 
 
-# NestJS - Some examples
+# NestJS - Basic Example - Module
+
+```ts
+import { Module } from '@nestjs/common';
+import { DatabaseModule } from '@libs/database';
+
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
+
+@Module({
+  imports: [
+    DatabaseModule.forRoot({ ...config })
+  ],
+  controllers: [UserController],
+  providers: [UserService],
+})
+export class AppModule {}
+
+```
+
+---
+
+# NestJS - Basic example
 
 ```ts
 import { Controller, Get } from '@nestjs/common';
@@ -839,14 +882,14 @@ export class UserService {
   constructor(private readonly databaseClient: DatabaseClient) {}
 
   getAll(filters: { firstname: string, lastname: string }): Promise<User[]> {
-    return this.databaseClient.getAllUsers();
+    return this.databaseClient.getAllUsers(filters);
   }
 }
 ```
 
 ---
 
-# NestJS - Some examples
+# NestJS - Flexibility
 
 ````md magic-move
 ```ts
@@ -942,6 +985,8 @@ export class TasksService {
 - Be carefull with class scoped variables, classes only get instantiated once for the runtime of the app (not the request!)
 - Schedulers/Queues run in a single process (no need for seperate services)
 
+<div v-click>
+
 ```ts
 @Injectable()
 export class UserService {
@@ -957,23 +1002,24 @@ export class UserService {
   }
 }
 ```
+</div>
 
----
-
-# Maybe demo?
-php vs js?
 
 ---
 
 # Conclusion
 
+- Javascript has some quirks
 - Javascript is easy to get started with.
 - Using Typescript and NestJS makes it possible to create high quality software.
 - Be careful when selecting 3rd party libraries (counts for PHP too though).
-- 
+- It can actually be fun!
 
 --- 
 
+<center>
+
 # Questions?
 
+</center>
 

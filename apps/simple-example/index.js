@@ -23,13 +23,13 @@ app.get('/', (req, res) => {
 
 app.get('/async', (req, res) => {
   asyncFunction();
-  res.send("Message received"); // Response is instant, asyncFunction runs 'in background'
+  res.send("Message received: didn't wait"); // Response is instant, asyncFunction runs 'in background'
 })
 
 app.get('/async-await', async (req, res) => {
   await asyncFunction();
-  res.send("Message received"); // Respose is much later, waits for asyncFunction to complete
+  res.send("Message received: waited"); // Respose is much later, waits for asyncFunction to complete
 })
 
 // Start the application
-app.listen(3000, () => console.log('Example app is listening on port 3000.'));
+app.listen(3000, () => console.log('App is listening on port 3000.'));
